@@ -28,7 +28,7 @@ pub fn run(store: &mut KvStore) {
     }
 }
 
-fn dispatch(store: &mut KvStore, line: &str) -> Option<String> {
+pub(crate) fn dispatch(store: &mut KvStore, line: &str) -> Option<String> {
     let mut parts = line.split_whitespace();
     let command = parts.next().unwrap_or("").to_ascii_uppercase();
 

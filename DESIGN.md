@@ -32,7 +32,7 @@ boundary was drawn wrong.
 |-------|---------------------------------------------|-------------|
 | 1     | KvStore + REPL, single-threaded              | done        |
 | 2     | Tests, key expiry (TTL)                      | done        |
-| 3     | TCP server (tokio), task per connection      | not started |
+| 3     | TCP server (tokio), task per connection      | done        |
 | 4     | Shared state across tasks (`RwLock`)         | not started |
 | 5     | Benchmark harness                            | not started |
 | 6+    | Distributed (multi-node) — not designed yet  | not started |
