@@ -5,9 +5,11 @@ structure of the C++ `kvstore` learning project. Demoable at the end
 of every phase.
 
 The name says "distributed," but the distributed design itself
-(replication? consensus? sharding?) is **deliberately not decided
-yet**. Phases 1-5 below build a solid single-node engine first, the
-same way the C++ project did. See "Phase 6+" at the bottom.
+(replication? consensus? sharding?) was **deliberately not decided
+until Phases 1-5 built a solid single-node engine first**, the same
+way the C++ project did. Phase 6's replication design is now recorded
+in `docs/hld/` — consensus (Raft) and sharding remain open, possible
+later phases. See "Phase 6+" at the bottom.
 
 ## Core principle
 
@@ -28,14 +30,15 @@ boundary was drawn wrong.
 
 ## Phases
 
-| Phase | What                                        | Status      |
-|-------|---------------------------------------------|-------------|
-| 1     | KvStore + REPL, single-threaded              | done        |
-| 2     | Tests, key expiry (TTL)                      | done        |
-| 3     | TCP server (tokio), task per connection      | done        |
-| 4     | Shared state across tasks (`RwLock`)         | done        |
-| 5     | Benchmark harness                            | done        |
-| 6+    | Distributed (multi-node) — not designed yet  | not started |
+| Phase | What                                            | Status                      |
+|-------|-------------------------------------------------|------------------------------|
+| 1     | KvStore + REPL, single-threaded                  | done                         |
+| 2     | Tests, key expiry (TTL)                          | done                         |
+| 3     | TCP server (tokio), task per connection          | done                         |
+| 4     | Shared state across tasks (`RwLock`)             | done                         |
+| 5     | Benchmark harness                                | done                         |
+| 6     | Distributed: async leader-follower replication   | designed (see `docs/hld/`)   |
+| 7+    | Raft consensus / sharding — not designed yet     | not started                  |
 
 Do not start a phase before the previous one builds and runs.
 
@@ -107,6 +110,9 @@ Recorded so they are choices, not oversights:
 - Persistence. Everything is lost on exit.
 - Proactive eviction. Expired keys are only purged lazily.
 - Binary-safe protocol.
-- The entire distributed-systems design. Not decided: replication
-  model, consistency guarantees, node discovery, failure handling.
-  Revisit once Phases 1-5 are solid.
+- The distributed-systems design beyond replication. Phase 6's
+  replication model, consistency guarantees, and failure-detection
+  approach are now recorded in `docs/hld/` (built once Phases 1-5
+  were solid, as planned). Still not decided: consensus (Raft),
+  sharding, node discovery beyond static config — see
+  `docs/hld/learning-roadmap.md` for where those would fit.
