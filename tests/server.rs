@@ -51,11 +51,33 @@ async fn responds_over_tcp() {
 }
 
 #[tokio::test]
-async fn connections_do_not_share_state() {
+async fn connections_share_state() {
     start_server("127.0.0.1:17879").await;
     let mut a = Client::connect("127.0.0.1:17879").await;
     let mut b = Client::connect("127.0.0.1:17879").await;
 
-    assert_eq!(a.send("SET only_a 1").await, "OK");
-    assert_eq!(b.send("GET only_a").await, "(nil)");
+    assert_eq!(a.send("SET shared 1").await, "OK");
+    assert_eq!(b.send("GET shared").await, "1");
+}
+
+#[tokio::test]
+async fn concurrent_writes_from_many_connections_all_land() {
+    start_server("127.0.0.1:17880").await;
+
+    let mut writers = Vec::new();
+    for i in 0..20 {
+        writers.push(tokio::spawn(async move {
+            let mut client = Client::connect("127.0.0.1:17880").await;
+            let key = format!("key{i}");
+            assert_eq!(client.send(&format!("SET {key} {i}")).await, "OK");
+        }));
+    }
+    for writer in writers {
+        writer.await.unwrap();
+    }
+
+    let mut reader = Client::connect("127.0.0.1:17880").await;
+    for i in 0..20 {
+        assert_eq!(reader.send(&format!("GET key{i}")).await, i.to_string());
+    }
 }
