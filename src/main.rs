@@ -1,3 +1,9 @@
+mod kvstore;
+mod repl;
+
+use kvstore::KvStore;
+
 fn main() {
-    println!("Hello, world!");
+    let mut store = KvStore::new();
+    repl::run(&mut store);
 }

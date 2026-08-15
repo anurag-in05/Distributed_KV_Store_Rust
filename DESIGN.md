@@ -30,7 +30,7 @@ boundary was drawn wrong.
 
 | Phase | What                                        | Status      |
 |-------|---------------------------------------------|-------------|
-| 1     | KvStore + REPL, single-threaded              | not started |
+| 1     | KvStore + REPL, single-threaded              | done        |
 | 2     | Tests, key expiry (TTL)                      | not started |
 | 3     | TCP server (tokio), task per connection      | not started |
 | 4     | Shared state across tasks (`RwLock`)         | not started |
