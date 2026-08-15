@@ -34,7 +34,7 @@ boundary was drawn wrong.
 | 2     | Tests, key expiry (TTL)                      | done        |
 | 3     | TCP server (tokio), task per connection      | done        |
 | 4     | Shared state across tasks (`RwLock`)         | done        |
-| 5     | Benchmark harness                            | not started |
+| 5     | Benchmark harness                            | done        |
 | 6+    | Distributed (multi-node) — not designed yet  | not started |
 
 Do not start a phase before the previous one builds and runs.
